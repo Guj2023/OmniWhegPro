@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/Users/gujun/Developer/OmniWhegPro/code/OmniWhegPro/Inc",
+                "/Users/gujun/Developer/OmniWhegPro/code/OmniWhegPro/User",
+                "${workspaceFolder}/code/OmniWhegPro/Inc/os_inc",
+                "${workspaceFolder}/code/OmniWhegPro/Inc/hal_inc",
+                "${workspaceFolder}/code/OmniWhegPro/Inc/m3_inc",
+                "${workspaceFolder}/code/OmniWhegPro/User/driver"
+            ],
+            "defines": [],
+            "macFrameworkPath": [
+                "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks"
+            ],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "macos-clang-arm64"
+        }
+    ],
+    "version": 4
+}
