@@ -1,15 +1,5 @@
 #include "common.h"
 
-struct can_feedback
-{
-	int16_t circle;
-	int16_t position;
-	int16_t speed;
-	int16_t current;
-	int16_t voltage;
-	uint8_t temperature;
-	uint8_t statue;
-};
 
 uint8_t can1_send_data[8];
 
@@ -18,6 +8,8 @@ int16_t body_speed[2];
 double body_rotation;
 	
 int16_t motor_speed[4];
+
+struct can_feedback feedback[4];
 
 bool isControling = false;
 

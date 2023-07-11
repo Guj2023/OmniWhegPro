@@ -40,6 +40,16 @@ extern double body_rotation;
 extern int16_t motor_speed[4];
 extern bool isControling;
 
+struct can_feedback
+{
+	int16_t circle;
+	int16_t position;
+	int16_t speed;
+	int16_t current;
+	int16_t voltage;
+	uint8_t temperature;
+	uint8_t statue;
+};
 
 extern struct can_feedback feedback[4];
 
