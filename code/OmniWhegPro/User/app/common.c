@@ -81,3 +81,68 @@ void can_receive(uint32_t recv_id, uint8_t data[])
 	else
 		return;
 }
+
+double fill_into(double error)
+{
+	while(error > 9000)
+		error -= 9000;
+	while(error < 0)
+		error += 9000;
+	return error;
+}
+
+void remoteControl(int Scalefactor)
+{
+			body_speed[0] = rc.ch1 / Scalefactor;
+		
+			body_speed[1] = rc.ch2 / Scalefactor;
+	
+			body_rotation = rc.ch3 / Scalefactor;
+	
+}
+
+void motors_command_receive()
+{
+	 if(rc.sw1 == 3 && rc.sw2 == 3)
+		 isControling = false;
+	 else
+		 isControling = true;
+	 if(rc.ch4 >= 300 && rc.ch4 < 660)
+		 autoAlignmentOneSide(true);
+	 else if(rc.ch4 <= -300  && rc.ch4 < -660)
+		 autoAlignmentOneSide(false);
+	 else if(rc.ch4 == 660)
+		autoAlignment();
+	 else if(rc.ch4 == -660)
+		autoAlignmentWithoutshifting();
+	 else
+		remoteControl(66);
+}
+
+void start_all()	
+{
+		// settle all parameters for servos
+		set_leg(0, PWM_MIDDLE);
+	
+    set_leg(1, PWM_MIDDLE);
+	
+		set_pwm_group_param(PWM_GROUP1,20000);
+		
+		start_pwm_output(PWM_IO1);
+	
+		start_pwm_output(PWM_IO2);
+	
+		start_pwm_output(PWM_IO3);
+	
+		start_pwm_output(PWM_IO4);
+	
+	  // settle all paramaters for BLDCs
+		can_device_init();
+	
+	  can_recv_callback_register(USER_CAN1, can_receive);
+	
+		can_receive_start();
+	
+		// settle all parameters for PID
+		//pid_init_new(&aline_pid, 1, 0, 0, 5, 5);
+}

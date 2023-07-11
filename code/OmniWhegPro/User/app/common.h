@@ -55,4 +55,11 @@ extern struct can_feedback feedback[4];
 
 void can_receive(uint32_t recv_id, uint8_t data[]);
 
+double fill_into(double error);
+
+void remoteControl(int Scalefactor);
+
+void motors_command_receive();
+
+void start_all();
 #endif

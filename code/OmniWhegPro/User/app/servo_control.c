@@ -76,3 +76,28 @@ void set_leg(int type, int pwm_time)
 		set_pwm_param(PWM_IO3, pwm_time);
 	}
 }
+enum WHEEL_STATE wheel_leg_switch_check(int wheel_type)
+{
+	int button = wheel_type?rc.sw2:rc.sw1;
+	enum WHEEL_STATE wheel_state = wheel_type?back_wheel_state:front_wheel_state;
+	if(button == 1 && wheel_state == CLOSED)
+		return TO_OPEN;
+	else if (button == 2 && wheel_state == OPENED)
+		return TO_CLOSE;
+	else 
+		return wheel_type?back_wheel_state:front_wheel_state;
+}
+
+void wheel_leg_switch(int wheel_type)
+{
+		enum WHEEL_STATE wheel_state = wheel_type?back_wheel_state:front_wheel_state;
+		if(wheel_leg_switch_check(wheel_type) == TO_OPEN)
+			open_legs(wheel_type);
+		else if(wheel_leg_switch_check(wheel_type) == TO_CLOSE)
+			close_legs(wheel_type);
+		else if(wheel_state == CLOSED)
+			set_leg(wheel_type, PWM_MIDDLE);
+		else if(wheel_state == OPENED)
+			opening_legs(wheel_type);
+		
+}
