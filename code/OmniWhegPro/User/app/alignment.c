@@ -59,3 +59,4 @@ void autoAlignmentWithoutshifting()
 	
 			write_can(USER_CAN1, SPEED_MODE, send_data);
 }
+

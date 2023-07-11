@@ -1,29 +1,61 @@
 #include "study_task.h"
 
+void motors_command_receive()
+{
+	 if(rc.sw1 == 3 && rc.sw2 == 3)
+		 isControling = false;
+	 else
+		 isControling = true;
+	 if(rc.ch4 >= 300 && rc.ch4 < 660)
+		 autoAlignmentOneSide(true);
+	 else if(rc.ch4 <= -300  && rc.ch4 < -660)
+		 autoAlignmentOneSide(false);
+	 else if(rc.ch4 == 660)
+		autoAlignment();
+	 else if(rc.ch4 == -660)
+		autoAlignmentWithoutshifting();
+	 else
+		remoteControl(66);
+}
 
-void study_task(const void*argu){
-	
-	set_pwm_group_param(PWM_GROUP1,20000);
-	
-	start_pwm_output(PWM_IO1);
-	
-	can_device_init();
-	
-	uint8_t can1_send_data[8];
 
-	int16_t current=0;
-
-	uint8_t n;
+void main_loop()
+{
+		
+		motors_command_receive();
 	
-	while(1)
-	{
+		mecanum_calculate(body_speed, body_rotation, motor_speed);
 		
-		current=rc.ch2 / 66;
+		if(isControling && rc.ch4 != -660)
+			motors_control();
 		
-		can1_send_data[0] = (current>>8);
-		can1_send_data[1] = ((current<<8)>>8);
-		write_can(USER_CAN1,0x202,can1_send_data);
+		wheel_leg_switch(0);
+	
+ 	  wheel_leg_switch(1);
 		
-		osDelay(20);
-	}
+		get_imu_data(&imu_data);
+		
+		imu_test[0] = ((int16_t)imu_data.angle_x>>8);
+		imu_test[1] = (((int16_t)imu_data.angle_x)>>8);
+
+		imu_test[2] = ((int16_t)imu_data.angle_y>>8);
+		imu_test[3] = (((int16_t)imu_data.angle_y)>>8);
+
+		imu_test[4] = ((int16_t)imu_data.angle_z>>8);
+		imu_test[5] = (((int16_t)imu_data.angle_z)>>8);
+
+		
+		write_can(USER_CAN1, 0x510, imu_test);
+		
+		osDelay(5);
+
+}
+
+
+void study_task(const void*argu)
+{
+	start_all();
+		
+	while(FOREVER)
+			main_loop();		
 }

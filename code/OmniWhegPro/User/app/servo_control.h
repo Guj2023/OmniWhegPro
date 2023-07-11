@@ -15,7 +15,6 @@ extern enum WHEEL_STATE back_wheel_state;
 void open_legs(int wheel_type);
 void close_legs(int wheel_type);
 void opening_legs(int type);
-void set_leg(int type, int pwm_time);
 enum WHEEL_STATE wheel_leg_switch_check(int wheel_type);
 void wheel_leg_switch(int wheel_type);
 

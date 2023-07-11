@@ -62,20 +62,6 @@ void close_legs(int wheel_type)
 		back_wheel_state = CLOSED;
 		}
 }
-void set_leg(int type, int pwm_time)
-{
-	if(type == 0)
-	{
-		set_pwm_param(PWM_IO1, pwm_time);
-		set_pwm_param(PWM_IO4, pwm_time);
-
-	}
-	else if (type == 1)
-	{
-		set_pwm_param(PWM_IO2, pwm_time);
-		set_pwm_param(PWM_IO3, pwm_time);
-	}
-}
 enum WHEEL_STATE wheel_leg_switch_check(int wheel_type)
 {
 	int button = wheel_type?rc.sw2:rc.sw1;

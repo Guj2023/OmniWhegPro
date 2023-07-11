@@ -9,6 +9,13 @@ double body_rotation;
 	
 int16_t motor_speed[4];
 
+uint8_t imu_test[8];
+
+imu_t imu_data;
+
+uint8_t debug_data[8];
+
+
 struct can_feedback feedback[4];
 
 bool isControling = false;
@@ -91,6 +98,24 @@ double fill_into(double error)
 	return error;
 }
 
+void mecanum_calculate(int16_t body_speed[2], double rotation, int16_t motor_speed[4])
+{
+	int r_vx = body_speed[0];
+	int r_vy = body_speed[1];
+	double r_vyaw = rotation;
+	motor_speed[0] = ( - r_vy + r_vx + r_vyaw * MOTOR_TO_CENTER);
+	motor_speed[1] = (r_vy + r_vx + r_vyaw * MOTOR_TO_CENTER);
+	motor_speed[2] = (r_vy - r_vx + r_vyaw * MOTOR_TO_CENTER);
+	motor_speed[3] = (- r_vy - r_vx + r_vyaw * MOTOR_TO_CENTER);
+
+	LIMIT_MIN_MAX(motor_speed[0],-MAX_SPEED,MAX_SPEED);
+	LIMIT_MIN_MAX(motor_speed[1],-MAX_SPEED,MAX_SPEED);
+	LIMIT_MIN_MAX(motor_speed[2],-MAX_SPEED,MAX_SPEED);
+	LIMIT_MIN_MAX(motor_speed[3],-MAX_SPEED,MAX_SPEED);
+	
+}
+
+
 void remoteControl(int Scalefactor)
 {
 			body_speed[0] = rc.ch1 / Scalefactor;
@@ -101,23 +126,21 @@ void remoteControl(int Scalefactor)
 	
 }
 
-void motors_command_receive()
+void set_leg(int type, int pwm_time)
 {
-	 if(rc.sw1 == 3 && rc.sw2 == 3)
-		 isControling = false;
-	 else
-		 isControling = true;
-	 if(rc.ch4 >= 300 && rc.ch4 < 660)
-		 autoAlignmentOneSide(true);
-	 else if(rc.ch4 <= -300  && rc.ch4 < -660)
-		 autoAlignmentOneSide(false);
-	 else if(rc.ch4 == 660)
-		autoAlignment();
-	 else if(rc.ch4 == -660)
-		autoAlignmentWithoutshifting();
-	 else
-		remoteControl(66);
+	if(type == 0)
+	{
+		set_pwm_param(PWM_IO1, pwm_time);
+		set_pwm_param(PWM_IO4, pwm_time);
+
+	}
+	else if (type == 1)
+	{
+		set_pwm_param(PWM_IO2, pwm_time);
+		set_pwm_param(PWM_IO3, pwm_time);
+	}
 }
+
 
 void start_all()	
 {

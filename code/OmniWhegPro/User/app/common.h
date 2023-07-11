@@ -53,11 +53,15 @@ struct can_feedback
 
 extern struct can_feedback feedback[4];
 
+void set_leg(int type, int pwm_time);
+
 void can_receive(uint32_t recv_id, uint8_t data[]);
 
 double fill_into(double error);
 
 void remoteControl(int Scalefactor);
+
+void mecanum_calculate(int16_t body_speed[2], double rotation, int16_t motor_speed[4]);
 
 void motors_command_receive();
 

@@ -1,6 +1,7 @@
 #ifndef ALIGNMENT_H
 #define ALIGNMENT_H
 #include "common.h"
+#include "motor_control.h"
 
 bool isShifted(double error, bool isFront);
 
@@ -13,4 +14,6 @@ void autoAlignment();
 void autoAlignmentOneSide(bool isFront);
 
 void autoAlignmentWithoutshifting();
+
+
 #endif
