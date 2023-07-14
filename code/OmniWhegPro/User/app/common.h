@@ -22,7 +22,7 @@
 #define PWM_MAX 2000 //2160
 #define PWM_MIN 1000  //840
 #define PWM_MIDDLE 1500
-#define PWM_LOOP_TIME 30
+#define PWM_LOOP_TIME 25
 #define PWM_PER_TIME 11
 #define DELAY_TIME 3
 
@@ -52,8 +52,6 @@ struct can_feedback
 };
 
 extern struct can_feedback feedback[4];
-
-void set_leg(int type, int pwm_time);
 
 void can_receive(uint32_t recv_id, uint8_t data[]);
 

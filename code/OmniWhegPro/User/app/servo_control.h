@@ -13,15 +13,14 @@ enum WHEEL_STATE
 };
 extern enum WHEEL_STATE front_wheel_state;
 extern enum WHEEL_STATE back_wheel_state;
-extern int wheg_vaule[4];
+extern int wheg_value[4];
 
-
+void set_leg(int id, int wheg_size);
 void open_legs(int wheel_type);
 void close_legs(int wheel_type);
-void opening_legs(int type);
 enum WHEEL_STATE wheel_leg_switch_check(int wheel_type);
 void wheel_leg_switch(int wheel_type);
-void servo_control();
+void pwms_set();
 void wheel_leg_update()
 void all_wheel_leg_switch();
 void wheel_leg_remote_control()

@@ -51,11 +51,9 @@ void work_loop()
 
 	motors_control();
 
-	front_wheel_state = wheel_leg_switch_check(0);
-	back_wheel_state = wheel_leg_switch_check(1);
+	wheel_leg_remote_control();
 
-	wheel_leg_switch(0);
-	wheel_leg_switch(1);
+	pwms_set();
 
 	sendRobotInfo();
 
