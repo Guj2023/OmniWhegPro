@@ -15,6 +15,7 @@ imu_t imu_data;
 
 uint8_t debug_data[8];
 
+uint8_t uart_recv[20];
 
 struct can_feedback feedback[4];
 
@@ -88,6 +89,11 @@ void can_receive(uint32_t recv_id, uint8_t data[])
 		return;
 	}
 
+void uart_recv_callback(void)
+{
+	return;
+}
+
 double fill_into(double error)
 {
 	while(error > 9000)
@@ -114,7 +120,7 @@ void mecanum_calculate(int16_t body_speed[2], double rotation, int16_t motor_spe
 	
 }
 
-void remoteControl(int Scalefactor)
+void remote_command_receive(int Scalefactor)
 {
 			body_speed[0] = rc.ch1 / Scalefactor;
 		
@@ -127,9 +133,13 @@ void remoteControl(int Scalefactor)
 void start_all()	
 {
 		// settle all parameters for servos
-		set_leg(0, PWM_MIDDLE);
+		set_leg(0, 0);
 	
-    	set_leg(1, PWM_MIDDLE);
+    	set_leg(1, 0);
+
+		set_leg(2, 0);
+
+		set_leg(3, 0);
 	
 		set_pwm_group_param(PWM_GROUP1,20000);
 		
@@ -149,6 +159,10 @@ void start_all()
 		can_receive_start();
 	
 		uart_init(USER_UART5, 9600, WORD_LEN_8B, STOP_BITS_1, PARITY_NONE);
+
+		uart_recv_callback_register(USER_UART5, uart_recv_callback);
+
+		uart_receive_start(USER_UART5, uart_recv, 20);
 }
 
 int stringlen(char *str)
@@ -159,7 +173,7 @@ int stringlen(char *str)
 	return i;
 }
 
-void sendImuData2pc()
+void send_imu_data2pc()
 {
 	char str[30];
 	//the length of char array is 30
@@ -167,7 +181,7 @@ void sendImuData2pc()
 	write_uart(USER_UART5, (uint8_t*)(str), sizeof(char) * stringlen(str));
 }
 
-void sendWheelInfo2pc(int id)
+void send_wheel_info2pc(int id)
 {
 	char str[30];
 	sprintf(str, "i:%d\ts:%d\tPWM:%d\tc:%d\tp:%d\tc:%d\r\n",id ,feedback[id].speed, 0, feedback[id].current, feedback[id].position, feedback[id].circle);

@@ -39,6 +39,7 @@ extern int16_t body_speed[2];
 extern double body_rotation;
 extern int16_t motor_speed[4];
 extern bool isControling;
+extern uint8_t uart_recv[20];
 
 struct can_feedback
 {
@@ -57,7 +58,7 @@ void can_receive(uint32_t recv_id, uint8_t data[]);
 
 double fill_into(double error);
 
-void remoteControl(int Scalefactor);
+void remote_command_receive(int Scalefactor);
 
 void mecanum_calculate(int16_t body_speed[2], double rotation, int16_t motor_speed[4]);
 
@@ -65,9 +66,9 @@ void motors_command_receive();
 
 int stringlen(char *str);
 
-void sendImuData2pc();
+void send_imu_data2pc();
 
-void sendWheelInfo2pc(int id);
+void send_wheel_info2pc(int id);
 
 void start_all();
 #endif

@@ -15,7 +15,7 @@ void motors_command_receive()
 	 else if(rc.ch4 == -660)
 		autoAlignmentWithoutshifting();
 	 else
-		remoteControl(66);
+		remote_command_receive(66);
 }
 
 
@@ -24,20 +24,20 @@ void main_loop()
 
 	get_imu_data(&imu_data);
 
-	sendImuData2pc();
+	send_imu_data2pc();
 
 	osDelay(500);
 
 }
 
-void sendRobotInfo()
+void send_robot_info2pc()
 {
-	sendImuData2pc();
+	send_imu_data2pc();
 
-	sendWheelInfo2pc(0);
-	sendWheelInfo2pc(1);
-	sendWheelInfo2pc(2);
-	sendWheelInfo2pc(3);
+	send_wheel_info2pc(0);
+	send_wheel_info2pc(1);
+	send_wheel_info2pc(2);
+	send_wheel_info2pc(3);
 
 }
 
@@ -45,7 +45,7 @@ void work_loop()
 {
 	get_imu_data(&imu_data);
 
-	remoteControl(66);
+	remote_command_receive(66);
 
 	mecanum_calculate(body_speed, body_rotation, motor_speed);
 
@@ -55,7 +55,7 @@ void work_loop()
 
 	pwms_set();
 
-	sendRobotInfo();
+	send_robot_info2pc();
 
 }
 
