@@ -6,7 +6,7 @@
 #include "uart_device.h"
 #include <stdbool.h>
 #include "math.h"
-//#include "cmath"
+#include "stdio.h"
 
 #define LIMIT_MIN_MAX(x,min,max) (x) = (((x)<=(min))?(min):(((x)>=(max))?(max):(x)))
 #define MOTOR_TO_CENTER 0.375
@@ -64,6 +64,12 @@ void remoteControl(int Scalefactor);
 void mecanum_calculate(int16_t body_speed[2], double rotation, int16_t motor_speed[4]);
 
 void motors_command_receive();
+
+int stringlen(char *str);
+
+void sendImuData2pc();
+
+void sendWheelInfo2pc(int id);
 
 void start_all();
 #endif

@@ -115,7 +115,6 @@ void mecanum_calculate(int16_t body_speed[2], double rotation, int16_t motor_spe
 	
 }
 
-
 void remoteControl(int Scalefactor)
 {
 			body_speed[0] = rc.ch1 / Scalefactor;
@@ -141,13 +140,12 @@ void set_leg(int type, int pwm_time)
 	}
 }
 
-
 void start_all()	
 {
 		// settle all parameters for servos
 		set_leg(0, PWM_MIDDLE);
 	
-    set_leg(1, PWM_MIDDLE);
+    	set_leg(1, PWM_MIDDLE);
 	
 		set_pwm_group_param(PWM_GROUP1,20000);
 		
@@ -159,13 +157,35 @@ void start_all()
 	
 		start_pwm_output(PWM_IO4);
 	
-	  // settle all paramaters for BLDCs
+	    //settle all paramaters for BLDCs
 		can_device_init();
 	
-	  can_recv_callback_register(USER_CAN1, can_receive);
+		can_recv_callback_register(USER_CAN1, can_receive);
 	
 		can_receive_start();
 	
-		// settle all parameters for PID
-		//pid_init_new(&aline_pid, 1, 0, 0, 5, 5);
+		uart_init(USER_UART5, 9600, WORD_LEN_8B, STOP_BITS_1, PARITY_NONE);
+}
+
+int stringlen(char *str)
+{
+	int i = 0;
+	while(str[i] != '\0')
+		i++;
+	return i;
+}
+
+void sendImuData2pc()
+{
+	char str[30];
+	//the length of char array is 30
+	sprintf(str, "x:%.2f\ty:%.2f\tz:%.2f\r\n", imu_data.angle_x, imu_data.angle_y, imu_data.angle_z);
+	write_uart(USER_UART5, (uint8_t*)(str), sizeof(char) * stringlen(str));
+}
+
+void sendWheelInfo2pc(int id)
+{
+	char str[30];
+	sprintf(str, "i:%d\ts:%d\tPWM:%d\tc:%d\tp:%d\tc:%d\r\n",id ,feedback[id].speed, 0, feedback[id].current, feedback[id].position, feedback[id].circle);
+	write_uart(USER_UART5, (uint8_t*)(str), sizeof(char) * stringlen(str));
 }

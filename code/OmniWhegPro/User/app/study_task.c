@@ -21,33 +21,43 @@ void motors_command_receive()
 
 void main_loop()
 {
-		
-		motors_command_receive();
-	
-		mecanum_calculate(body_speed, body_rotation, motor_speed);
-		
-		if(isControling && rc.ch4 != -660)
-			motors_control();
-		
-		wheel_leg_switch(0);
-	
- 	  wheel_leg_switch(1);
-		
-		get_imu_data(&imu_data);
-		
-		imu_test[0] = ((int16_t)imu_data.angle_x>>8);
-		imu_test[1] = (((int16_t)imu_data.angle_x)>>8);
 
-		imu_test[2] = ((int16_t)imu_data.angle_y>>8);
-		imu_test[3] = (((int16_t)imu_data.angle_y)>>8);
+	get_imu_data(&imu_data);
 
-		imu_test[4] = ((int16_t)imu_data.angle_z>>8);
-		imu_test[5] = (((int16_t)imu_data.angle_z)>>8);
+	sendImuData2pc();
 
-		
-		write_can(USER_CAN1, 0x510, imu_test);
-		
-		osDelay(5);
+	osDelay(500);
+
+}
+
+void sendRobotInfo()
+{
+	sendImuData2pc();
+
+	sendWheelInfo2pc(0);
+	sendWheelInfo2pc(1);
+	sendWheelInfo2pc(2);
+	sendWheelInfo2pc(3);
+
+}
+
+void work_loop()
+{
+	get_imu_data(&imu_data);
+
+	remoteControl(66);
+
+	mecanum_calculate(body_speed, body_rotation, motor_speed);
+
+	motors_control();
+
+	front_wheel_state = wheel_leg_switch_check(0);
+	back_wheel_state = wheel_leg_switch_check(1);
+
+	wheel_leg_switch(0);
+	wheel_leg_switch(1);
+
+	sendRobotInfo();
 
 }
 
@@ -57,5 +67,6 @@ void study_task(const void*argu)
 	start_all();
 		
 	while(FOREVER)
-			main_loop();		
+		main_loop();		
 }
+
