@@ -21,9 +21,9 @@ void close_legs(int wheel_type);
 enum WHEEL_STATE wheel_leg_switch_check(int wheel_type);
 void wheel_leg_switch(int wheel_type);
 void pwms_set();
-void wheel_leg_update()
+void wheel_leg_update();
 void all_wheel_leg_switch();
-void wheel_leg_remote_control()
+void wheel_leg_remote_control();
 
 
 

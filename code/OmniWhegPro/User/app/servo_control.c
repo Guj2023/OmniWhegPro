@@ -116,6 +116,16 @@ void all_wheel_leg_switch()
 
 void wheel_leg_remote_control()
 {
-	wheel_leg_update();
-	all_wheel_leg_switch();
+	if(WHEG_REMOTE_CONTROL)
+	{
+		wheel_leg_update();
+		all_wheel_leg_switch();
+	}
+	else
+	{
+		wheg_value[0] = uart_wheg_value[0];
+		wheg_value[1] = uart_wheg_value[1];
+		wheg_value[2] = uart_wheg_value[2];
+		wheg_value[3] = uart_wheg_value[3];
+	}
 }

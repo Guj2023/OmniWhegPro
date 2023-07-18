@@ -17,6 +17,8 @@ uint8_t debug_data[8];
 
 uint8_t uart_recv[20];
 
+uint8_t uart_wheg_value[4];
+
 struct can_feedback feedback[4];
 
 bool isControling = false;
@@ -91,6 +93,7 @@ void can_receive(uint32_t recv_id, uint8_t data[])
 
 void uart_recv_callback(void)
 {
+	write_led_io(LED_IO5, LED_ON);
 	return;
 }
 
