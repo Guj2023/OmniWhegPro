@@ -6,7 +6,7 @@
 
 enum WHEEL_STATE
  {
-    OPENED = 0,
+  OPENED = 0,
 	TO_OPEN,
 	TO_CLOSE,
 	CLOSED

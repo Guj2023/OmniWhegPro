@@ -94,6 +94,10 @@ void can_receive(uint32_t recv_id, uint8_t data[])
 void uart_recv_callback(void)
 {
 	write_led_io(LED_IO5, LED_ON);
+	uart_wheg_value[0] = uart_recv[0];
+	uart_wheg_value[1] = uart_recv[1];
+	uart_wheg_value[2] = uart_recv[2];
+	uart_wheg_value[3] = uart_recv[3];
 	return;
 }
 
@@ -138,7 +142,7 @@ void start_all()
 		// settle all parameters for servos
 		set_leg(0, 0);
 	
-    	set_leg(1, 0);
+    set_leg(1, 0);
 
 		set_leg(2, 0);
 
@@ -154,18 +158,18 @@ void start_all()
 	
 		start_pwm_output(PWM_IO4);
 	
-	    //settle all paramaters for BLDCs
+	  //settle all paramaters for BLDCs
 		can_device_init();
 	
 		can_recv_callback_register(USER_CAN1, can_receive);
 	
 		can_receive_start();
 	
-		uart_init(USER_UART5, 9600, WORD_LEN_8B, STOP_BITS_1, PARITY_NONE);
+		uart_init(MY_UART, 9600, WORD_LEN_8B, STOP_BITS_1, PARITY_NONE);
 
-		uart_recv_callback_register(USER_UART5, uart_recv_callback);
+		uart_recv_callback_register(MY_UART, uart_recv_callback);
 
-		uart_receive_start(USER_UART5, uart_recv, 20);
+		uart_receive_start(MY_UART, uart_recv, 20);
 }
 
 int stringlen(char *str)
@@ -181,12 +185,12 @@ void send_imu_data2pc()
 	char str[30];
 	//the length of char array is 30
 	sprintf(str, "x:%.2f\ty:%.2f\tz:%.2f\r\n", imu_data.angle_x, imu_data.angle_y, imu_data.angle_z);
-	write_uart(USER_UART5, (uint8_t*)(str), sizeof(char) * stringlen(str));
+	write_uart(MY_UART, (uint8_t*)(str), sizeof(char) * stringlen(str));
 }
 
 void send_wheel_info2pc(int id)
 {
 	char str[30];
 	sprintf(str, "i:%d\ts:%d\tPWM:%d\tc:%d\tp:%d\tc:%d\r\n",id ,feedback[id].speed, 0, feedback[id].current, feedback[id].position, feedback[id].circle);
-	write_uart(USER_UART5, (uint8_t*)(str), sizeof(char) * stringlen(str));
+	write_uart(MY_UART, (uint8_t*)(str), sizeof(char) * stringlen(str));
 }

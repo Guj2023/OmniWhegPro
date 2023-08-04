@@ -27,11 +27,12 @@
 #define DELAY_TIME 3
 
 
-#define ALINE_THRESHOLD 100
-#define ALINE_OFFSET_FRONT 1559
-#define ALINE_OFFSET_BACK 5722
+#define ALINE_THRESHOLD 150
+#define ALINE_OFFSET_FRONT 1700
+#define ALINE_OFFSET_BACK 5200
 
 #define WHEG_REMOTE_CONTROL true
+#define MY_UART USER_UART2
 
 extern uint8_t debug_data[8];
 extern uint8_t imu_test[8];
