@@ -183,14 +183,18 @@ int stringlen(char *str)
 void send_imu_data2pc()
 {
 	char str[30];
+	char result[35];
 	//the length of char array is 30
-	sprintf(str, "x:%.2f\ty:%.2f\tz:%.2f\r\n", imu_data.angle_x, imu_data.angle_y, imu_data.angle_z);
-	write_uart(MY_UART, (uint8_t*)(str), sizeof(char) * stringlen(str));
+	sprintf(str, "%.2f %.2f %.2f", imu_data.angle_x, imu_data.angle_y, imu_data.angle_z);
+	sprintf(result, "%s %d\r\n", str, stringlen(str));
+	write_uart(MY_UART, (uint8_t*)(result), sizeof(char) * stringlen(result));
 }
 
 void send_wheel_info2pc(int id)
 {
 	char str[30];
-	sprintf(str, "i:%d\ts:%d\tPWM:%d\tc:%d\tp:%d\tc:%d\r\n",id ,feedback[id].speed, 0, feedback[id].current, feedback[id].position, feedback[id].circle);
-	write_uart(MY_UART, (uint8_t*)(str), sizeof(char) * stringlen(str));
+	char result[35];
+	sprintf(str, "%d %d %d %d %d %d",id ,feedback[id].speed, 0, feedback[id].current, feedback[id].position, feedback[id].circle);
+	sprintf(result,"%s %d\r\n",str,stringlen(str));
+	write_uart(MY_UART, (uint8_t*)(result), sizeof(char) * stringlen(result));
 }
