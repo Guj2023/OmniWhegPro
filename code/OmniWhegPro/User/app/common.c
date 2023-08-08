@@ -15,9 +15,11 @@ imu_t imu_data;
 
 uint8_t debug_data[8];
 
-uint8_t uart_recv[20];
+uint8_t uart_recv[8];
 
 uint8_t uart_wheg_value[4];
+
+uint8_t uart_speed_value[4];
 
 struct can_feedback feedback[4];
 
@@ -27,18 +29,18 @@ void can_receive(uint32_t recv_id, uint8_t data[])
 {
 	if(recv_id == 0x208)
 	{
-		feedback[0].circle = (int16_t) ((data[0] << 8) | data[1]);
+			feedback[0].circle = (int16_t) ((data[0] << 8) | data[1]);
     	feedback[0].position = (int16_t) ((data[2] << 8) | data[3]);
     	feedback[0].speed = (int16_t) ((data[4] << 8) | data[5]);
     	feedback[0].current = (int16_t) ((data[6] << 8) | data[7]);	
-		write_led_io(LED_IO1, LED_ON);
+			write_led_io(LED_IO1, LED_ON);
 	}
     else if (recv_id == 0x209)
     {
     	feedback[0].voltage = data[0];
     	feedback[0].temperature = data[1];
-		feedback[0].statue = data[2];
-		write_led_io(LED_IO1, LED_OFF);
+			feedback[0].statue = data[2];
+			write_led_io(LED_IO1, LED_OFF);
     }
 	else if(recv_id == 0x20a)
 	{
@@ -93,11 +95,17 @@ void can_receive(uint32_t recv_id, uint8_t data[])
 
 void uart_recv_callback(void)
 {
-	write_led_io(LED_IO5, LED_ON);
+	write_led_io(LED_IO1, LED_ON);
+
 	uart_wheg_value[0] = uart_recv[0];
 	uart_wheg_value[1] = uart_recv[1];
 	uart_wheg_value[2] = uart_recv[2];
 	uart_wheg_value[3] = uart_recv[3];
+
+	uart_speed_value[0] = uart_recv[4];
+	uart_speed_value[1] = uart_recv[5];
+	uart_speed_value[2] = uart_recv[6];
+	uart_speed_value[3] = uart_recv[7];
 	return;
 }
 
@@ -169,7 +177,7 @@ void start_all()
 
 		uart_recv_callback_register(MY_UART, uart_recv_callback);
 
-		uart_receive_start(MY_UART, uart_recv, 20);
+		uart_receive_start(MY_UART, uart_recv, 8);
 }
 
 int stringlen(char *str)
