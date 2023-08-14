@@ -39,8 +39,8 @@
   */
 //#define USER_TASK1 chassis_task
 //#define USER_TASK2 gimbal_task
-#define USER_TASK3 study_task
-//#define USER_TASK4 
+#define USER_TASK3 omniwheg_task
+#define USER_TASK4 communication_task
 //#define USER_TASK5
 
 /**

@@ -31,7 +31,7 @@
 #define ALINE_OFFSET_FRONT 1700
 #define ALINE_OFFSET_BACK 5200
 
-#define WHEG_REMOTE_CONTROL false
+#define WHEG_REMOTE_CONTROL true
 #define MY_UART USER_UART2
 
 extern uint8_t debug_data[8];
@@ -44,6 +44,9 @@ extern int16_t motor_speed[4];
 extern bool isControling;
 extern uint8_t uart_recv[8];
 extern uint8_t uart_wheg_value[4];
+extern char imu_message[50];
+extern char wheel_message[50];
+
 
 struct can_feedback
 {

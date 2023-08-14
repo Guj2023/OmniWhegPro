@@ -6,12 +6,10 @@
 
 #include "startup.h"
 #include "sys.h"
-#include "study_task.h"
+#include "omniwheg_task.h"
 #include "uart_device.h"
 #include "can_device.h"
-//#include "chassis_task.h"
-//#include "gimbal_task.h"
-
+#include "common.h"
 
 //运行在定义的任务函数执行前，可以用来初始化任务中用到的 IO 端口，配置、开启外界硬件设备，注册硬件设备的接收回调函数
 void init_setup(void){

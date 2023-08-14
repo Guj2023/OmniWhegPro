@@ -25,6 +25,10 @@ struct can_feedback feedback[4];
 
 bool isControling = false;
 
+char imu_message[50];
+
+char wheel_message[50];
+
 void can_receive(uint32_t recv_id, uint8_t data[])
 {
 	if(recv_id == 0x208)
@@ -150,7 +154,7 @@ void start_all()
 		// settle all parameters for servos
 		set_leg(0, 0);
 	
-    set_leg(1, 0);
+    	set_leg(1, 0);
 
 		set_leg(2, 0);
 
@@ -166,7 +170,6 @@ void start_all()
 	
 		start_pwm_output(PWM_IO4);
 	
-	  //settle all paramaters for BLDCs
 		can_device_init();
 	
 		can_recv_callback_register(USER_CAN1, can_receive);
@@ -190,19 +193,17 @@ int stringlen(char *str)
 
 void send_imu_data2pc()
 {
-	char str[30];
-	char result[35];
-	//the length of char array is 30
-	sprintf(str, "i %.2f %.2f %.2f", imu_data.angle_x, imu_data.angle_y, imu_data.angle_z);
-	sprintf(result, "%s %d\r\n", str, stringlen(str));
-	write_uart(MY_UART, (uint8_t*)(result), sizeof(char) * stringlen(result));
+  int formatted_len = sprintf(imu_message, "i %.2f %.2f %.2f", imu_data.angle_x, imu_data.angle_y, imu_data.angle_z);
+  sprintf(imu_message, "%s %d\r\n\0", imu_message, formatted_len);
+    
+  write_uart(MY_UART, (uint8_t*)(imu_message), sizeof(char) * stringlen(imu_message));
+	
 }
 
 void send_wheel_info2pc(int id)
 {
-	char str[30];
-	char result[35];
-	sprintf(str, "w %d %d %d %d %d %d",id ,feedback[id].speed, 0, feedback[id].current, feedback[id].position, feedback[id].circle);
-	sprintf(result,"%s %d\r\n",str,stringlen(str));
-	write_uart(MY_UART, (uint8_t*)(result), sizeof(char) * stringlen(result));
+  int formatted_len = sprintf(wheel_message, "w %d %d %d %d %d %d", id, feedback[id].speed, 0, feedback[id].current, feedback[id].position, feedback[id].circle);
+  sprintf(wheel_message, "%s %d\r\n", wheel_message, formatted_len);
+    
+  write_uart(MY_UART, (uint8_t*)(wheel_message), sizeof(char) * stringlen(wheel_message));
 }
