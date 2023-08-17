@@ -17,13 +17,15 @@ uint8_t debug_data[8];
 
 uint8_t uart_recv[8];
 
-uint8_t uart_wheg_value[4];
+uint8_t uart_wheg_value[4] = {0};
 
-uint8_t uart_speed_value[4];
+uint8_t uart_speed_value[4] = {0};
 
 struct can_feedback feedback[4];
 
 bool isControling = false;
+
+bool isRemoted = true;
 
 char imu_message[50];
 

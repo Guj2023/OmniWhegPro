@@ -45,18 +45,19 @@ void autoAlignmentOneSide(bool isFront)
 
 void autoAlignmentWithoutshifting()
 {
-			double error_front = fill_into(feedback[0].position + feedback[1].position);	
-			double error_back = fill_into(-feedback[2].position - feedback[3].position);
-			sendAllDebugInfo(error_front, error_back);
-	    uint8_t send_data[8];
+	isControling = false;
+	double error_front = fill_into(feedback[0].position + feedback[1].position);	
+	double error_back = fill_into(-feedback[2].position - feedback[3].position);
+	sendAllDebugInfo(error_front, error_back);
+	uint8_t send_data[8];
 	
-			int speed_front = -isShifted(error_front, true);
-	    int speed_back = -isShifted(error_back, false);
-			set_motor_speed((int16_t)(0), 0, send_data);
-			set_motor_speed((int16_t)(speed_front), 1, send_data);
-			set_motor_speed((int16_t)(0), 2, send_data);
-			set_motor_speed((int16_t)(speed_back), 3, send_data);
+	int speed_front = -isShifted(error_front, true);
+	int speed_back = -isShifted(error_back, false);
+	set_motor_speed((int16_t)(0), 0, send_data);
+	set_motor_speed((int16_t)(speed_front), 1, send_data);
+	set_motor_speed((int16_t)(0), 2, send_data);
+	set_motor_speed((int16_t)(speed_back), 3, send_data);
 	
-			write_can(USER_CAN1, SPEED_MODE, send_data);
+	write_can(USER_CAN1, SPEED_MODE, send_data);
 }
 

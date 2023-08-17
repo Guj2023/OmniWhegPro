@@ -2,10 +2,11 @@
 
 void motors_command_receive()
 {
+	isControling = true;
 	 if(rc.sw1 == 3 && rc.sw2 == 3)
-		 isControling = false;
+		 isRemoted = false;
 	 else
-		 isControling = true;
+		 isRemoted = true;
 	 if(rc.ch4 >= 300 && rc.ch4 < 660)
 		 autoAlignmentOneSide(true);
 	 else if(rc.ch4 <= -300  && rc.ch4 < -660)

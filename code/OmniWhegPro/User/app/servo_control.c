@@ -116,7 +116,7 @@ void all_wheel_leg_switch()
 
 void wheel_leg_remote_control()
 {
-	if(WHEG_REMOTE_CONTROL)
+	if(isRemoted)
 	{
 		wheel_leg_update();
 		all_wheel_leg_switch();
